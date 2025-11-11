@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         demoPlayButton.disabled = true;
         demoPlayButton.classList.add('cursor-not-allowed');
 
-        fetch('http://localhost:8000/kinyarwanda-tts', {
+        fetch('https://pl7zldq8-8000.uks1.devtunnels.ms/kinyarwanda-tts', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
