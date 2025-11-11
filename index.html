@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinyarwanda TTS API — Fast, Natural, Local</title>
+    <meta name="description" content="Convert Kinyarwanda text into natural-sounding audio for your apps, devices, and services with our simple and powerful REST API.">
+
+    <!-- SEO / Open Graph -->
+    <meta property="og:title" content="Kinyarwanda TTS API — Fast, Natural, Local">
+    <meta property="og:description" content="The best way to integrate Kinyarwanda text-to-speech into your applications.">
+    <meta property="og:image" content="https://placehold.co/1200x630/7c3aed/ffffff?text=Muraho+World">
+    <meta property="og:url" content="#">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom Styles & Animations -->
+    <style>
+        /* Basic scroll-behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom gradient text */
+        .gradient-text {
+            background: linear-gradient(to right, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .dark .dark\:gradient-text {
+            background: linear-gradient(to right, #a78bfa, #f9a8d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Framer-style entrance animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+
+        /* Animation delays */
+        .animation-delay-200 { animation-delay: 0.2s; }
+        .animation-delay-400 { animation-delay: 0.4s; }
+        .animation-delay-600 { animation-delay: 0.6s; }
+
+        /* For hiding elements before animation starts */
+        [style*="animation-delay"] {
+            opacity: 0;
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a78bfa;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8b5cf6;
+        }
+    </style>
+    <script>
+        // Set dark mode based on user preference
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-sans antialiased">
+
+    <!-- =============================================== -->
+    <!-- Header & Navigation -->
+    <!-- =============================================== -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2 text-xl font-bold">
+                    <i class="fa-solid fa-waveform gradient-text"></i>
+                    <span class="dark:text-white" data-key="logo">Muraho TTS</span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="#features" class="hover:text-violet-500 transition-colors" data-key="nav_features">Features</a>
+                    <a href="#integrations" class="hover:text-violet-500 transition-colors" data-key="nav_integrations">Integrations</a>
+                    <a href="#pricing" class="hover:text-violet-500 transition-colors" data-key="nav_pricing">Pricing</a>
+                </nav>
+
+                <!-- Right side controls -->
+                <div class="flex items-center gap-4">
+                    <button id="dark-mode-toggle" aria-label="Toggle dark mode" class="w-10 h-10 flex justify-center items-center rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-sun dark:hidden"></i>
+                        <i class="fa-solid fa-moon hidden dark:inline"></i>
+                    </button>
+                    <div class="relative">
+                        <button id="language-toggle" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                            <i class="fa-solid fa-globe"></i>
+                            <span id="current-lang-label">EN</span>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="language-menu" class="hidden absolute top-full right-0 mt-2 w-28 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg">
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-700" data-lang="en">English</a>
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-700" data-lang="kin">Kinyarwanda</a>
+                        </div>
+                    </div>
+                    <a href="#pricing" class="hidden sm:inline-block px-4 py-2 text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 rounded-lg shadow-md transition-all" data-key="nav_get_api_key">Get API Key</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-16 sm:py-24">
+
+        <!-- =============================================== -->
+        <!-- Hero Section -->
+        <!-- =============================================== -->
+        <section id="hero" class="grid md:grid-cols-2 gap-12 items-center mb-24 md:mb-32">
+            <div class="text-center md:text-left">
+                <p class="fade-in-up font-semibold text-violet-500" data-key="hero_badge">Beta • 99.9% Uptime (Simulated) • Developer Friendly</p>
+                <h1 class="fade-in-up animation-delay-200 text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white mt-4" data-key="hero_headline">Bring Kinyarwanda to Life</h1>
+                <h1 class="fade-in-up animation-delay-200 text-4xl md:text-5xl lg:text-6xl font-extrabold gradient-text dark:dark:gradient-text" data-key="hero_headline_gradient">Text-to-Speech API</h1>
+                <p class="fade-in-up animation-delay-400 mt-6 text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto md:mx-0" data-key="hero_subtext">Turn written Kinyarwanda into human-like audio for apps, wearables, and services. Easy REST API, multiple voice models, and low latency.</p>
+                <div class="fade-in-up animation-delay-600 mt-8 flex gap-4 justify-center md:justify-start">
+                    <a href="#pricing" class="px-6 py-3 font-semibold text-white bg-violet-600 hover:bg-violet-700 rounded-lg shadow-lg transition-all transform hover:scale-105" data-key="hero_cta_primary">Get API Key</a>
+                    <a href="#" class="px-6 py-3 font-semibold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-lg shadow-md transition-all" data-key="hero_cta_secondary">Read Docs</a>
+                </div>
+            </div>
+            <div class="fade-in animation-delay-400">
+                <img src="https://placehold.co/480x360/1e293b/a78bfa?text=Muraho TTS" alt="Stylized waveform visualization" class="rounded-lg shadow-2xl mx-auto">
+            </div>
+        </section>
+
+
+
+        <!-- Features Section -->
+        <!-- =============================================== -->
+        <section id="features" class="mb-24 md:mb-32">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white" data-key="features_title">Who are we?</h2>
+                <p class="mt-4 text-lg text-slate-600 dark:text-slate-400" data-key="features_subtitle">We provide simple way to integrate Kinyarwanda text-to-speech into your applications.</p>
+                            <!-- YouTube Video -->
+            <div class="mt-16 max-w-4xl mx-auto">
+                <div class="relative" style="padding-top: 56.25%;">
+                    <iframe class="absolute top-0 left-0 w-full h-full rounded-lg shadow-xl" src="https://www.youtube.com/embed/oV8rUfhTUF0?si=zDnjx-E3_wGQX5Ub" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="p-6 bg-white dark:bg-slate-800 rounded-lg shadow-md">
+                    <i class="fa-solid fa-bolt text-2xl text-violet-500 mb-4"></i>
+                    <h3 class="font-bold text-lg text-slate-900 dark:text-white" data-key="feature1_title">Low Latency</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mt-2" data-key="feature1_desc">Real-time streaming for interactive applications.</p>
+                </div>
+                <!-- Feature 5 -->
+                <div class="p-6 bg-white dark:bg-slate-800 rounded-lg shadow-md">
+                    <i class="fa-brands fa-python text-2xl text-violet-500 mb-4"></i>
+                    <h3 class="font-bold text-lg text-slate-900 dark:text-white" data-key="feature5_title">SDKs Available</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mt-2" data-key="feature5_desc">Ready-to-use wrappers for JS and Python.</p>
+                </div>
+                <!-- Feature 6 -->
+                <div class="p-6 bg-white dark:bg-slate-800 rounded-lg shadow-md">
+                    <i class="fa-solid fa-dollar-sign text-2xl text-violet-500 mb-4"></i>
+                    <h3 class="font-bold text-lg text-slate-900 dark:text-white" data-key="feature6_title">Usage-Based Pricing</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mt-2" data-key="feature6_desc">Pay only for what you use. No hidden fees.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- =============================================== -->
+        <!-- Integrations Section -->
+        <!-- =============================================== -->
+        <section id="integrations" class="mb-24 md:mb-32">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white" data-key="integrations_title">Real-World Integrations</h2>
+                <p class="mt-4 text-lg text-slate-600 dark:text-slate-400" data-key="integrations_subtitle">See how Muraho TTS powers innovative applications.</p>
+            </div>
+            <div class="space-y-16">
+                <!-- Integration 1: AI Models -->
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <i class="fa-solid fa-robot text-3xl text-violet-500"></i>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white" data-key="integ1_title"> AI-powered solutions</h3>
+                                <p class="text-slate-600 dark:text-slate-400" data-key="integ1_desc">Convert sign-language transcriptions into spoken Kinyarwanda for accessibility.</p>
+                            </div>
+                        </div>
+                        <pre class="bg-slate-800 dark:bg-black text-white p-4 rounded-lg text-sm overflow-x-auto"><code>curl -X POST "https://api.kinyarwanda-tts.example/v1/speak" \
+-H "Authorization: Bearer sk_test_..." \
+-d '{"text":"Amakuru?"}'</code></pre>
+                    </div>
+                    <div class="aspect-w-16 aspect-h-9">
+                        <iframe width="560" height="315" class="rounded-lg shadow-lg" src="https://www.youtube.com/embed/R4O3Xvihf0Q?si=154yji_fXDrjxgHm" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+                    </div>
+                </div>
+
+                
+                <!-- Integration 2: IoT -->
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="md:order-2">
+                        <div class="flex items-center gap-4 mb-4">
+                            <i class="fa-solid fa-glasses text-3xl text-violet-500"></i>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white" data-key="integ2_title">IOT Devices</h3>
+<p class="text-slate-600 dark:text-slate-400" data-key="integ2_desc">Generate real-time audio cues on wearable devices from object detection output.</p>
+                            </div>
+                        </div>
+                        <pre class="bg-slate-800 dark:bg-black text-white p-4 rounded-lg text-sm overflow-x-auto"><code>// Python SDK Example
+import muraho_tts
+muraho_tts.api_key = "sk_test_..."
+audio = muraho_tts.generate("Icyapa cy'umuhanda imbere")
+audio.play()</code></pre>
+                    </div>
+                    <div class="aspect-w-16 aspect-h-9 md:order-1">
+                        <iframe width="560" height="315" class="rounded-lg shadow-lg" src="https://www.youtube.com/embed/R4O3Xvihf0Q?si=154yji_fXDrjxgHm" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <!-- Integration 3: Voice Apps -->
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <i class="fa-solid fa-headset text-3xl text-violet-500"></i>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white" data-key="integ3_title">Voice Driven Applications</h3>
+                                <p class="text-slate-600 dark:text-slate-400" data-key="integ3_desc">Low-latency streaming for voice assistants, comms, and IVR systems.</p>
+                            </div>
+                        </div>
+                        <pre class="bg-slate-800 dark:bg-black text-white p-4 rounded-lg text-sm overflow-x-auto"><code>// JavaScript SDK Example
+import { speak } from 'muraho-tts';
+const audioStream = await speak({
+  text: 'Murakaza neza kuri serivisi yacu.',
+  streaming: true
+});</code></pre>
+                    </div>
+                    <div class="aspect-w-16 aspect-h-9">
+<iframe width="560" height="315" class="rounded-lg shadow-lg" src="https://www.youtube.com/embed/9vzqah7S2fk?si=PXg83_kW_5jnqpJL" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+         <!-- =============================================== -->
+
+
+        <!-- =============================================== -->
+        <!-- Live Demo Section -->
+        <!-- =============================================== -->
+        <section id="live-demo" class="mb-24 md:mb-32 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white" data-key="demo_title">Try it Now</h2>
+            <p class="mt-4 text-lg text-slate-600 dark:text-slate-400" data-key="demo_subtitle">Enter some Kinyarwanda text and hear it live. (Uses a placeholder audio)</p>
+            <div class="mt-8 max-w-2xl mx-auto">
+                <div class="flex flex-col sm:flex-row gap-4">
+                                        <textarea id="demo-text-input" class="flex-grow w-full px-4 py-3 rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-violet-500 focus:border-violet-500" placeholder="e.g., Muraho neza, isi!" rows="3">Muraho neza, isi!</textarea>
+                    <button id="demo-play-button" class="px-8 py-3 font-semibold text-white bg-violet-600 hover:bg-violet-700 rounded-lg shadow-md transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play"></i>
+                        <span data-key="demo_play_button">Play</span>
+                    </button>
+                </div>
+                <div id="demo-loader" class="hidden mt-4 text-sm text-slate-500">
+                    <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                    <span data-key="demo_generating">Generating audio...</span>
+                </div>
+                <audio id="demo-audio" src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zRDEQAAAAYAAABkAAAHQAAAAANjBWFwAAAAAOkAAAA4AAAAAAD/80DEeAAADpAAAAOCAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"></audio>
+            </div>
+        </section>
+
+        <!-- =============================================== -->
+        <!-- Pricing Section -->
+        <!-- =============================================== -->
+        <section id="pricing" class="mb-24 md:mb-32">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white" data-key="pricing_title">Simple, Transparent Pricing</h2>
+                <p class="mt-4 text-lg text-slate-600 dark:text-slate-400" data-key="pricing_subtitle">Start for free, then pay as you grow.</p>
+            </div>
+            <div class="flex justify-center">
+                <div class="w-full max-w-sm p-8 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-violet-500/50 transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white text-center" data-key="plan_name">Developer</h3>
+                    <p class="mt-4 text-center">
+                        <span class="text-5xl font-extrabold text-slate-900 dark:text-white">$9</span>
+                        <span class="text-slate-500 dark:text-slate-400" data-key="plan_per_month">/ month</span>
+                    </p>
+                    <p class="text-center text-sm text-slate-500 mt-2" data-key="plan_or_payg">or pay-as-you-go</p>
+                    <ul class="mt-8 space-y-4 text-slate-600 dark:text-slate-300">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check-circle text-violet-500"></i><span data-key="plan_feat1">1,000,000 characters/month</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check-circle text-violet-500"></i><span data-key="plan_feat3">SSML support</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check-circle text-violet-500"></i><span data-key="plan_feat4">Community support</span></li>
+                    </ul>
+                    <button id="start-trial-button" class="w-full mt-8 px-6 py-3 font-semibold text-white bg-violet-600 hover:bg-violet-700 rounded-lg shadow-lg transition-all" data-key="plan_cta">Start Trial & Get API Key</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =============================================== -->
+    <!-- Footer -->
+    <!-- =============================================== -->
+    <footer class="border-t border-slate-200 dark:border-slate-800">
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-center md:text-left">
+                    <p class="text-sm">&copy; 2025 Muraho TTS. All Rights Reserved.</p>
+                    <p class="text-xs text-slate-500 mt-1" data-key="footer_accessibility">Accessibility-first design.</p>
+                </div>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-violet-500" data-key="footer_docs">Docs</a>
+                    <a href="#pricing" class="hover:text-violet-500" data-key="footer_pricing">Pricing</a>
+                    <a href="#" class="hover:text-violet-500" data-key="footer_terms">Terms</a>
+                    <a href="#" class="hover:text-violet-500" data-key="footer_privacy">Privacy</a>
+                </div>
+                <div class="flex gap-4 text-lg">
+                    <a href="#" class="hover:text-violet-500"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="hover:text-violet-500"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="hover:text-violet-500"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =============================================== -->
+    <!-- Payment Modal -->
+    <!-- =============================================== -->
+    <div id="payment-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div id="modal-content" class="relative bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-md m-4 transform transition-all opacity-0 scale-95">
+            <!-- Close Button -->
+            <button id="modal-close-button" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 z-10">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
+
+            <div id="modal-view-container" class="relative">
+                <!-- Step 1: Email -->
+                <div id="modal-step-1" class="p-8 hidden">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white" data-key="modal_step1_title">Add Payment Method</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mt-2" data-key="modal_step1_subtitle">Enter your email to continue.</p>
+                    <form id="email-form" class="mt-6">
+                        <label for="email" class="font-semibold text-sm" data-key="modal_email_label">Email Address</label>
+                        <input type="email" id="email" required class="w-full mt-2 px-4 py-2 rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-violet-500 focus:border-violet-500" placeholder="you@example.com">
+                        <p id="email-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid email.</p>
+                        <button type="submit" class="w-full mt-6 px-6 py-3 font-semibold text-white bg-violet-600 hover:bg-violet-700 rounded-lg" data-key="modal_continue_btn">Continue</button>
+                    </form>
+                </div>
+
+                <!-- Step 2: Card Details -->
+                <div id="modal-step-2" class="p-8 hidden">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white" data-key="modal_step2_title">Simulated Payment</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mt-2" data-key="modal_step2_subtitle">This is a demo. <strong class="font-bold">Do not use a real card.</strong></p>
+                    <form id="card-form" class="mt-6 space-y-4">
+                        <div>
+                            <label for="card-number" class="font-semibold text-sm" data-key="modal_card_label">Card Number</label>
+                            <input type="text" id="card-number" required class="w-full mt-2 px-4 py-2 rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-violet-500 focus:border-violet-500" placeholder="4242 4242 4242 4242">
+                            <p id="card-error" class="text-red-500 text-sm mt-1 hidden">Invalid card number.</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-1">
+                                <label for="card-expiry" class="font-semibold text-sm" data-key="modal_expiry_label">Expiry</label>
+                                <input type="text" id="card-expiry" required class="w-full mt-2 px-4 py-2 rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-violet-500 focus:border-violet-500" placeholder="MM / YY">
+                            </div>
+                            <div class="flex-1">
+                                <label for="card-cvc" class="font-semibold text-sm" data-key="modal_cvc_label">CVC</label>
+                                <input type="text" id="card-cvc" required class="w-full mt-2 px-4 py-2 rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-violet-500 focus:border-violet-500" placeholder="123">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full mt-6 px-6 py-3 font-semibold text-white bg-violet-600 hover:bg-violet-700 rounded-lg" data-key="modal_pay_btn">Confirm Payment (Simulated)</button>
+                    </form>
+                </div>
+
+                <!-- Step 3: Processing -->
+                <div id="modal-step-3" class="p-8 hidden text-center">
+                    <i class="fa-solid fa-spinner fa-spin text-4xl text-violet-500"></i>
+                    <h3 class="text-xl font-bold mt-4 text-slate-900 dark:text-white" data-key="modal_step3_title">Processing Payment...</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mt-2" data-key="modal_step3_subtitle">This will take a few seconds.</p>
+                </div>
+
+                <!-- Step 4: Success / API Key Reveal -->
+                <div id="modal-step-4" class="p-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto">
+                            <i class="fa-solid fa-check text-3xl text-green-500"></i>
+                        </div>
+                        <h3 id="success-title" class="text-xl font-bold mt-4 text-slate-900 dark:text-white" data-key="modal_step4_title">Welcome! Your API Key is Ready.</h3>
+                        <p id="success-subtitle" class="text-slate-600 dark:text-slate-400 mt-2" data-key="modal_step4_subtitle">You can now start building with Muraho TTS.</p>
+                    </div>
+                    <div class="mt-6 space-y-4">
+                        <div>
+                            <label class="font-semibold text-sm" data-key="modal_api_key_label">Your API Key</label>
+                            <div class="flex items-center gap-2 mt-2">
+                                <input id="api-key-input" type="password" readonly class="flex-grow w-full px-4 py-2 rounded-lg border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-700 font-mono text-sm" value="sk_test_********************">
+                                <button id="toggle-api-key" class="px-3 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600"><i class="fa-solid fa-eye"></i></button>
+                                <button id="copy-api-key" class="px-3 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600"><i class="fa-solid fa-copy"></i></button>
+                            </div>
+                            <p id="copy-feedback" class="text-green-500 text-sm mt-1 hidden" data-key="modal_copied_feedback">Copied!</p>
+                        </div>
+                        <div>
+                            <label class="font-semibold text-sm" data-key="modal_endpoint_label">API Endpoint</label>
+                            <pre class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 p-3 rounded-lg text-xs mt-2 overflow-x-auto"><code>POST https://api.kinyarwanda-tts.example/v1/speak</code></pre>
+                        </div>
+                    </div>
+                    <div id="payment-cta-container" class="mt-6">
+                         <button id="add-payment-button" class="w-full px-6 py-3 font-semibold text-white bg-violet-600 hover:bg-violet-700 rounded-lg">Add Payment Method</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="src/main.js" defer></script>
+
+</body>
+
+</html>
+
+</body>
+
+</html>
