@@ -105,12 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
             modal_step1_subtitle: "Enter your email to continue.",
             modal_email_label: "Email Address",
             modal_continue_btn: "Continue",
-            modal_step2_title: "Simulated Payment",
-            modal_step2_subtitle: "This is a demo. <strong>Do not use a real card.</strong>",
+            modal_step2_title: "Payment",
+            modal_step2_subtitle: "<strong>credit card.</strong>",
             modal_card_label: "Card Number",
             modal_expiry_label: "Expiry",
             modal_cvc_label: "CVC",
-            modal_pay_btn: "Confirm Payment (Simulated)",
+            modal_pay_btn: "Confirm Payment",
             modal_step3_title: "Processing Payment...",
             modal_step3_subtitle: "This will take a few seconds.",
             modal_step4_title: "Welcome! Your API Key is Ready.",
@@ -216,8 +216,18 @@ document.addEventListener('DOMContentLoaded', () => {
         languageMenu.classList.toggle('hidden');
     });
 
+    // --- Mobile Menu ---
+    const mobileMenuButton = $('#mobile-menu-button');
+    const mobileMenu = $('#mobile-menu');
+
+    mobileMenuButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mobileMenu.classList.toggle('hidden');
+    });
+
     document.addEventListener('click', () => {
         languageMenu.classList.add('hidden');
+        mobileMenu.classList.add('hidden');
     });
 
     languageMenu.addEventListener('click', (e) => {
