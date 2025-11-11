@@ -158,10 +158,8 @@
                 <p class="fade-in-up font-semibold text-violet-500" data-key="hero_badge">Beta • 99.9% Uptime (Simulated) • Developer Friendly</p>
                 <h1 class="fade-in-up animation-delay-200 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white" data-key="hero_headline">Bring Kinyarwanda to Life</h1>
                 <h1 class="fade-in-up animation-delay-200 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold gradient-text dark:dark:gradient-text" data-key="hero_headline_gradient">Text-to-Speech API</h1>
-                <p class="fade-in-up animation-delay-400 mt-6 text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto md:mx-0" data-key="hero_subtext">Turn written Kinyarwanda into human-like audio for apps, wearables, and services. Easy REST API, multiple voice models, and low latency.</p>
                 <div class="fade-in-up animation-delay-600 mt-8 flex gap-4 justify-center md:justify-start">
                     <a href="#pricing" class="px-6 py-3 font-semibold text-white bg-violet-600 hover:bg-violet-700 rounded-lg shadow-lg transition-all transform hover:scale-105" data-key="hero_cta_primary">Get API Key</a>
-                    <a href="#" class="px-6 py-3 font-semibold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-lg shadow-md transition-all" data-key="hero_cta_secondary">Read Docs</a>
                 </div>
             </div>
             <div class="fade-in animation-delay-400">
@@ -301,6 +299,7 @@ const audioStream = await speak({
                 </div>
                 <div id="demo-loader" class="hidden mt-4 text-sm text-slate-500">
                     <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+
                     <span data-key="demo_generating">Generating audio...</span>
                 </div>
                 <audio id="demo-audio" src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zRDEQAAAAYAAABkAAAHQAAAAANjBWFwAAAAAOkAAAA4AAAAAAD/80DEeAAADpAAAAOCAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"></audio>
