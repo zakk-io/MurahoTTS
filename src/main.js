@@ -55,8 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
             nav_pricing: "Pricing",
             nav_get_api_key: "Get API Key",
             hero_badge: "Beta • Developer Friendly",
-            hero_headline: "Bring Kinyarwanda speech to your business",
-            hero_headline_gradient: "Text-to-Speech API",
+            hero_headline: "Bring Kinyarwanda speech service to your business",
+            hero_headline_gradient: "Speech service API",
             hero_subtext: "Turn written Kinyarwanda into human-like audio for apps, wearables, and services. Easy REST API, multiple voice models, and low latency.",
             hero_cta_primary: "Get API Key",
             hero_cta_secondary: "Read Docs",
@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
         demoPlayButton.disabled = true;
         demoPlayButton.classList.add('cursor-not-allowed');
 
-        fetch('https://pl7zldq8-8000.uks1.devtunnels.ms/kinyarwanda-tts', {
+        fetch('http://127.0.0.1:8000/kinyarwanda-tts', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
